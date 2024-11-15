@@ -5,13 +5,22 @@
 }
 
 body {
-    background: linear-gradient(17deg, rgb(255, 255, 255) 0%, rgb(21, 226, 100) 100%);
-    height: 100vh;
+    background: linear-gradient(17deg, rgb(49, 127, 151) 0%, rgb(247, 247, 247) 100%);
+    height: 100%;
+    min-height: 100%;
+    margin: 0px;
+    padding: 0px;
 }
 
-.weather-container > svg {
-    height: 200px;
-    width: 200px;
+html, body {
+    min-height: 100% !important;
+    max-width: auto;
+    background-size: cover;
+}
+
+.weather-container > img {
+    height: 120px;
+    width: 120px;
 }
 
 .container {
@@ -25,6 +34,7 @@ body {
 .weather-container {
     display: flex;
     flex-direction: column;
+    min-width: 20%;
     gap: 10px;
     justify-items: center;
     align-items: center;
@@ -33,18 +43,22 @@ body {
     width: fit-content;
     height: fit-content;
     padding: 20px;
-    backdrop-filter: blur(10px);
-    background: linear-gradient(17deg, rgba(130,184,231,1) 0%, rgba(0,215,75,1) 100%);
+    background: linear-gradient(17deg, rgba(179, 198, 214, 0.4) 0%, rgba(40, 168, 151, 0.4) 100%);
 }
 
 .hours {
     display: flex;
+    overflow-x: auto;
     overflow-y: hidden;
     justify-content: center safe;
     width: 80vw;
     gap: 20px;
     scrollbar-width: thin;
     padding: 20px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 img {
@@ -55,15 +69,20 @@ img {
 .hour-card {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 2px;
     align-items: center;
     justify-items: center;
     box-shadow: -5px 5px 10px rgb(83, 79, 79);
+    min-width: fit-content;
     border-radius: 5%;
     position: relative;
     top: 0;
     transition: top ease 0.5s;
-    background: linear-gradient(17deg, rgba(130,184,231,1) 0%, rgba(0,215,75,1) 100%);
+    background: linear-gradient(17deg, rgb(179, 198, 214, 0.4) 0%, rgba(40, 168, 151, 0.4) 100%);
+}
+
+.hour-card > img {
+    height: 20%;
 }
 
 .hour-card:hover {

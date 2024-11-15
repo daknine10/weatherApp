@@ -10,13 +10,12 @@ async function getWeather(city) {
     try {
         const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${apiKey}&contentType=json`, {mode: 'cors'})
         const weatherData = await response.json();
-        console.log(weatherData)
         let nextHours = []
+
         const hourNow = new Date().getHours()
         let hoursToday = weatherData.days[0].hours.slice(hourNow)
         let hoursTomorrow = weatherData.days[1].hours.slice(0, hourNow)
-        console.log(hoursToday)
-        console.log(hoursTomorrow)
+
         for (let hour of hoursToday) {
             nextHours.push({
                 datetime: hour.datetime,
@@ -40,7 +39,7 @@ async function getWeather(city) {
             humidity: weatherData.currentConditions.humidity,
             hours: nextHours
             }
-        console.log(nextHours)
+
         return data
     }
     catch (error) {
@@ -50,7 +49,7 @@ async function getWeather(city) {
 }
 
 function renderError() {
-    weatherContainer.textContent = "Bad API request"
+    weatherContainer.textContent = "Bad API request :( Try to enter again."
 }
 
 async function renderWeather(apiCall) {
@@ -72,19 +71,23 @@ async function renderWeather(apiCall) {
     const humidity = document.createElement("h4");
     humidity.textContent = apiReturn.humidity + '% Humidity';
 
+    const precipprob = document.createElement("h4");
+    precipprob.textContent = apiReturn.hours[0].precipprob + '%';
+    precipprob.className = "precipprob"
+
     weatherContainer.append(cityName);
     weatherContainer.append(icon);
     weatherContainer.append(temperature);
     weatherContainer.append(humidity);
+    weatherContainer.append(precipprob);
 }
 
 async function renderNextHours(apiCall) {
     const apiReturn = await apiCall
     const hourNow = new Date().getHours()
-    hoursContainer.style.overflowX = "scroll";
 
     for (let [index, hour] of apiReturn.hours.entries()) {
-        if (index === 24 - hourNow - 1){
+        if (index === 24 - hourNow){
             const tomorrow = document.createElement("div");
             tomorrow.className = "tomorrow";
             tomorrow.textContent = "Next day"
