@@ -1,4 +1,5 @@
 import "./style.css"
+import loading from "./tube-spinner.svg"
 
 
 const weatherContainer = document.querySelector(".weather-container")
@@ -53,7 +54,11 @@ function renderError() {
 }
 
 async function renderWeather(apiCall) {
+    const loadingElement = document.createElement("img")
+    loadingElement.src = loading
+    weatherContainer.append(loadingElement)
     const apiReturn = await apiCall
+    loadingElement.remove()
 
     const cityName = document.createElement("h2");
     cityName.textContent = apiReturn.city
@@ -94,8 +99,10 @@ async function renderNextHours(apiCall) {
 
         time.textContent = hour.datetime.slice(0, -3);
         icon.src = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/3rd%20Set%20-%20Color/${hour.icon}.svg`
-        temp.textContent = hour.temp + ' °C';
-        precipprob.textContent = 'Rain: ' + hour.precipprob + '%';
+        temp.textContent = hour.temp + ' ℃';
+        temp.className = "temp"
+        precipprob.textContent = hour.precipprob + '%';
+        precipprob.className = "precipprob"
         
         hoursContainer.append(hourCard)
         hourCard.append(time)

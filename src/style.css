@@ -82,3 +82,12 @@ img {
     align-items: center;
     justify-items: center;
 }
+
+.precipprob::before {
+    content: url(rain.svg);
+    margin-right: 6px;
+}
+    
+.temp::before {
+    content: url(temp.svg);
+}
