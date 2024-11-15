@@ -11,7 +11,20 @@ async function getWeather(city) {
         const weatherData = await response.json();
         console.log(weatherData)
         let nextHours = []
-        for (let hour of weatherData.days[0].hours) {
+        const hourNow = new Date().getHours()
+        let hoursToday = weatherData.days[0].hours.slice(hourNow)
+        let hoursTomorrow = weatherData.days[1].hours.slice(0, hourNow)
+        console.log(hoursToday)
+        console.log(hoursTomorrow)
+        for (let hour of hoursToday) {
+            nextHours.push({
+                datetime: hour.datetime,
+                temp: hour.temp,
+                precipprob: hour.precipprob,
+                icon: hour.icon
+            })
+        }
+        for (let hour of hoursTomorrow) {
             nextHours.push({
                 datetime: hour.datetime,
                 temp: hour.temp,
@@ -26,11 +39,12 @@ async function getWeather(city) {
             humidity: weatherData.currentConditions.humidity,
             hours: nextHours
             }
-        console.log(weatherData.days[0].hours)
+        console.log(nextHours)
         return data
     }
     catch (error) {
-        return renderError()
+        renderError()
+        console.log(error)
     }
 }
 
@@ -61,8 +75,16 @@ async function renderWeather(apiCall) {
 
 async function renderNextHours(apiCall) {
     const apiReturn = await apiCall
-    console.log(apiReturn.hours)
-    for (let hour of apiReturn.hours) {
+    const hourNow = new Date().getHours()
+    hoursContainer.style.overflowX = "scroll";
+
+    for (let [index, hour] of apiReturn.hours.entries()) {
+        if (index === 24 - hourNow - 1){
+            const tomorrow = document.createElement("div");
+            tomorrow.className = "tomorrow";
+            tomorrow.textContent = "Next day"
+            hoursContainer.append(tomorrow)
+        }
         const hourCard = document.createElement("div");
         hourCard.className = "hour-card"
         const time = document.createElement("h3");
@@ -70,7 +92,7 @@ async function renderNextHours(apiCall) {
         const temp = document.createElement("h3");
         const precipprob = document.createElement("h4");
 
-        time.textContent = hour.datetime;
+        time.textContent = hour.datetime.slice(0, -3);
         icon.src = `https://raw.githubusercontent.com/visualcrossing/WeatherIcons/58c79610addf3d4d91471abbb95b05e96fb43019/SVG/3rd%20Set%20-%20Color/${hour.icon}.svg`
         temp.textContent = hour.temp + ' °C';
         precipprob.textContent = 'Rain: ' + hour.precipprob + '%';
